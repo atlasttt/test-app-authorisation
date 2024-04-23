@@ -50,7 +50,7 @@ class UserController {
   async getUsers(req, res, next) {
     try {
       const users = await userService.getUsers();
-      res.json({ users: users });
+      res.json(users);
     } catch (error) {
       next(error);
     }
