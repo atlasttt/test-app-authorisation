@@ -14,7 +14,8 @@ class UserService {
 
   async registration(email, pass, username) {
     const candidate = await this.getUserByEmail(email);
-    if (candidate) throw ApiError.BadRequest("User already exists");
+    if (candidate)
+      throw ApiError.BadRequest("Пользователь с такой почтой уже существует");
     const password = await bcrypt.hash(pass, 10);
     const query =
       "INSERT INTO users (email, password, username) VALUES ($1, $2, $3) RETURNING *";
@@ -36,20 +37,29 @@ class UserService {
     return users.rows.map((user) => ({ ...new UserDto(user) }));
   }
 
+  async getMe(id) {
+    const query = "SELECT * FROM users WHERE id = $1";
+    const values = [id];
+    const user = await client.query(query, values);
+    if (!user.rows[0]) throw ApiError.BadRequest("Пользователь не найден");
+    const userDto = new UserDto(user.rows[0]);
+    return { ...userDto };
+  }
+
   async editUser(id, username) {
     const query = "UPDATE users SET username = $2 WHERE id = $1 RETURNING *";
     const values = [id, username];
     const user = await client.query(query, values);
-    if (!user.rows[0]) throw ApiError.BadRequest("User not found");
+    if (!user.rows[0]) throw ApiError.BadRequest("Пользователь не найден");
     const userDto = new UserDto(user.rows[0]);
     return { ...userDto };
   }
 
   async login(email, password) {
     const user = await this.getUserByEmail(email);
-    if (!user) throw ApiError.BadRequest("User not found");
+    if (!user) throw ApiError.BadRequest("Неверная почта или пароль");
     const isPassEquals = await bcrypt.compare(password, user.password);
-    if (!isPassEquals) throw ApiError.BadRequest("Invalid password");
+    if (!isPassEquals) throw ApiError.BadRequest("Неверная почта или пароль");
     const userDto = new UserDto(user);
     const tokens = await tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
@@ -68,7 +78,7 @@ class UserService {
     const query = "DELETE FROM users WHERE id = $1 RETURNING *";
     const values = [id];
     const user = await client.query(query, values);
-    if (!user.rows[0]) throw ApiError.BadRequest("User not found");
+    if (!user.rows[0]) throw ApiError.BadRequest("Пользователь не найден");
     const userDto = new UserDto(user.rows[0]);
     return { ...userDto };
   }

@@ -4,10 +4,10 @@ const { client } = require("../db");
 class TokenService {
   async generateTokens(payload) {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-      expiresIn: "1h",
+      expiresIn: process.env.EXPIRE_IN,
     });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-      expiresIn: "30d",
+      expiresIn: process.env.EXPIRE_REFRESH_IN,
     });
     return { accessToken, refreshToken };
   }

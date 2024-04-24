@@ -1,31 +1,41 @@
 <script setup lang="ts">
-import { computed } from "vue";
+const variants = {
+  primary: "#3d3d38",
+  danger: "#ec3333",
+};
 
-type Color = "primary" | "danger";
+type Color = keyof typeof variants;
 
 const props = defineProps<{ color?: Color }>();
 
-const color = computed(() => {
-  switch (props.color) {
-    case "primary":
-      return "#3d3d38";
-    case "danger":
-      return "#ec3333";
-    default:
-      return "#3d3d38";
-  }
-});
+const color = variants[props.color || "primary"];
 </script>
 <template>
   <button class="button button--variant"><slot /></button>
 </template>
 
 <style scoped>
+button {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  color: #fff;
+  &:hover {
+    opacity: 0.9;
+  }
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
 .button--variant {
   background-color: v-bind(color);
-  color: #fff;
-  border-radius: 4px;
-  font-size: 0.95em;
-  text-align: center;
 }
 </style>

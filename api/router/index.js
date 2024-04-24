@@ -19,9 +19,10 @@ router.post(
   userController.login
 );
 router.post("/logout", userController.logout);
-router.post("/refresh", userController.refresh);
+router.get("/refresh", userController.refresh);
 router.get("/users", authMiddleware, userController.getUsers);
-router.put(
+router.get("/users/me", authMiddleware, userController.getMe);
+router.patch(
   "/users/:id",
   body("username").isLength({ min: 3, max: 32 }),
   authMiddleware,

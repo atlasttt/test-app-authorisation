@@ -56,6 +56,16 @@ class UserController {
     }
   }
 
+  async getMe(req, res, next) {
+    try {
+      const user = req.user;
+      const userData = await userService.getMe(user.id);
+      res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async editUser(req, res, next) {
     validateBody(req, res, next);
     try {

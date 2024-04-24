@@ -21,6 +21,8 @@ services:
       DB_NAME: "postgres"
       JWT_ACCESS_SECRET: "secret"
       JWT_REFRESH_SECRET: "refresh_secret"
+      EXPIRE_IN: "30m"
+      EXPIRE_REFRESH_IN: "30d"
       CLIENT_URL: "http://localhost:5173"
 
   db:

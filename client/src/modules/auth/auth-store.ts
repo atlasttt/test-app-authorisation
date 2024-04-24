@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { AuthService } from "@/shared/services/auth-service";
 import { ref } from "vue";
 import { User } from "@/shared/types";
+import { UserService } from "@/shared/services/user-service";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null);
@@ -23,11 +24,39 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = response.data.user;
   };
 
+  const getMe = async () => {
+    const response = await UserService.getMe();
+    user.value = response.data || null;
+  };
+
+  const updateProfile = async (username: string) => {
+    const id = user.value?.id;
+    if (!id) return;
+    await UserService.updateProfile(id, username);
+    await getMe();
+  };
+
   const logout = async () => {
     $api.post("/logout");
     localStorage.removeItem("token");
     user.value = null;
   };
 
-  return { login, registration, logout };
+  const deleteProfile = async () => {
+    const id = user.value?.id;
+    if (!id) return;
+
+    await UserService.deleteUser(id);
+    user.value = null;
+  };
+
+  return {
+    user,
+    login,
+    registration,
+    getMe,
+    updateProfile,
+    logout,
+    deleteProfile,
+  };
 });

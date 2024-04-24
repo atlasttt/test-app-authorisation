@@ -1,19 +1,47 @@
 <script setup lang="ts">
-import { UserService } from "@/shared/services/user-service";
-import { User } from "@/shared/types";
-import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/modules/auth";
+import { UiCard, UiButton, UiCardActions } from "@/shared/components";
 
-const users = ref<User[]>([]);
-onMounted(async () => {
+const router = useRouter();
+const authStore = useAuthStore();
+
+const onLogout = async () => {
   try {
-    const res = await UserService.getUsers();
-    users.value = res.data;
-  } catch (error) {}
-});
+    await authStore.logout();
+    router.push("/auth");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const onEdit = () => {
+  router.push("/profile");
+};
 </script>
 
 <template>
-  <div>{{ users }}</div>
+  <div>
+    <UiCard>
+      <h2>Привет, {{ authStore.user?.username }}!</h2>
+      <p>Ваш email: {{ authStore.user?.email }}</p>
+
+      <UiCardActions>
+        <div class="card__action">
+          <UiButton @click="onEdit">Редактировать</UiButton>
+          <UiButton @click="onLogout" color="danger">Выйти</UiButton>
+        </div>
+      </UiCardActions>
+    </UiCard>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.card__action {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+}
+</style>

@@ -10,6 +10,7 @@ defineEmits(["update:modelValue"]);
     @input="
       $emit('update:modelValue', ($event.target as HTMLInputElement).value)
     "
+    :value="modelValue"
   />
 </template>
 

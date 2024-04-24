@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import "./assets/style.scss";
 import "./assets/fonts/stylesheet.css";
+import "vue3-toastify/dist/index.css";
 import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
