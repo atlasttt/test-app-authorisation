@@ -1,7 +1,7 @@
 FROM node:18
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 RUN npm install -g nodemon
 EXPOSE 5000
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "run", "start" ]

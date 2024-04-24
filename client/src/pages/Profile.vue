@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/modules/auth";
-import { UiCard, UiInput, UiCardHeader, UiButton } from "@/shared/components";
+import { UiCard, UiInput, UiButton } from "@/shared/components";
 import UiCardActions from "@/shared/components/card/ui-card-actions.vue";
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";

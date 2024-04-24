@@ -7,7 +7,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
     volumes:
-      - ./api:/usr/src/app
+      - ./api:/app
     ports:
       - "5000:5000"
     depends_on:
@@ -23,7 +23,7 @@ services:
       JWT_REFRESH_SECRET: "refresh_secret"
       EXPIRE_IN: "30m"
       EXPIRE_REFRESH_IN: "30d"
-      CLIENT_URL: "http://localhost:5173"
+      CLIENT_URL: "http://localhost:8080"
 
   db:
     container_name: postgres_db
@@ -33,6 +33,19 @@ services:
       POSTGRES_PASSWORD: "test_password"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+
+  client_app:
+    container_name: client
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - express_app
 
 volumes:
   postgres_data:

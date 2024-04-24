@@ -5,7 +5,7 @@ import "vue3-toastify/dist/index.css";
 import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
-import Vue3Toastify, { type ToastContainerOptions } from "vue3-toastify";
+import Vue3Toastify from "vue3-toastify";
 
 const pinia = createPinia();
 
